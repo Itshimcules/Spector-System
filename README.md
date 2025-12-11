@@ -20,6 +20,7 @@ The system is composed of three distinct "Pillars" that bridge the gap between t
  * Role: Persistent Object History.
  * Function: Every object and NPC has a vector embedding. If an NPC mentions a locket lost 3 years ago, that data is retrieved from the Vector DB, ensuring narrative consistency (Chekhov’s Gun).
  * Implementation: SQLite-vec for local, low-latency vector search.
+
 Tech Stack
 | Component | Technology | Role |
 |---|---|---|
@@ -29,12 +30,18 @@ Tech Stack
 | Memory | SQLite-vec | Local Vector Database for episodic memory. |
 | Voice | Whisper & Piper | STT and TTS for <500ms conversation latency. |
 | Orchestration | Semantic Kernel | Managing the agentic loop. |
-🚀 Getting Started
+
+Getting Started
 Prerequisites
+
  * GPU: NVIDIA RTX 3060 (12GB VRAM) or higher recommended.
+
  * OS: Windows 10/11 or Ubuntu 22.04 (WSL2 supported).
- * Software: Unreal Engine 5.3+, Docker, Python 3.10+.
+ 
+* Software: Unreal Engine 5.3+, Docker, Python 3.10+.
+
 Installation
+
 1. Set up the AI Core
 cd ai-core
 pip install -r requirements.txt

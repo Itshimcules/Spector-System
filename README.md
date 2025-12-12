@@ -2,31 +2,31 @@
 
 > **"A simulation where the player cannot travel for miles, but can enter every room, open every drawer, speak to every resident, and disrupt every routine."**
 
-## 📖 Abstract
+## Abstract
 
 **Project Spector** is an open-source framework designed to realize Warren Spector's theoretical "One City Block" RPG concept. Historically, this vision was impossible due to the "Authoring Bottleneck"—the inability to manually script deep behaviors for hundreds of characters.
 
 This project solves that bottleneck by replacing deterministic scripting with **Local Generative AI Architecture**. By orchestrating multi-agent systems, memory storage, and dynamic personality loading, we create a framework for living worlds that emerge from independent agents.
 
-## 📊 Project Status
+## Project Status
 
 **Current Phase**: Prototype Framework
 
 This repository contains the core architecture and orchestration layer for Project Spector. The foundation is complete and functional:
 
-- ✅ FastAPI backend with event processing
-- ✅ Game Master event routing system  
-- ✅ LoRA adapter management (awaiting model files)
-- ✅ Memory storage with text search
-- ✅ C++ client for Unreal Engine integration
-- ⚠️ Voice services (stub implementations)
-- ⚠️ AI model integration (in progress)
-- ⚠️ Unreal Engine environment (not included)
+- [x] FastAPI backend with event processing
+- [x] Game Master event routing system  
+- [x] LoRA adapter management (awaiting model files)
+- [x] Memory storage with text search
+- [x] C++ client for Unreal Engine integration
+- [ ] Voice services (stub implementations)
+- [ ] AI model integration (in progress)
+- [ ] Unreal Engine environment (not included)
 
 **What works now**: Event orchestration, agent selection, prompt generation, database operations.  
 **What's needed**: LLM model files, LoRA adapters, Unreal Engine implementation.
 
-## 🏗️ Architecture
+## Architecture
 
 The system is composed of three distinct "Pillars" that bridge the gap between traditional game loops and Generative AI.
 
@@ -44,23 +44,23 @@ The system is composed of three distinct "Pillars" that bridge the gap between t
 
 ### 3. The Infinite Drawer (Vector RAG)
 
-*   **Role:** Persistent Object History.
-*   **Function:** Every object and NPC has a vector embedding. If an NPC mentions a locket lost 3 years ago, that data is retrieved from the Vector DB, ensuring narrative consistency (Chekhov's Gun).
-*   **Implementation:** `SQLite-vec` for local, low-latency vector search.
+* **Role:** Persistent Object History.
+* **Function:** Every object and NPC has a vector embedding. If an NPC mentions a locket lost 3 years ago, that data is retrieved from the Vector DB, ensuring narrative consistency (Chekhov's Gun).
+* **Implementation:** `SQLite-vec` for local, low-latency vector search.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Component | Technology | Status |
 |:---|:---|:---|
-| **Backend** | FastAPI + Python 3.10+ | ✅ Implemented |
-| **Database** | SQLite with text search | ✅ Implemented |
-| **Engine** | Unreal Engine 5 (C++ client) | ⚠️ Interface only |
-| **Inference** | Llama-3-8B (planned) | ⏳ Not integrated |
-| **Personalities** | LoRA Adapters | ⏳ Awaiting files |
-| **Voice STT** | Whisper | ⏳ Stub only |
-| **Voice TTS** | Piper | ⏳ Stub only |
+| **Backend** | FastAPI + Python 3.10+ | Implemented |
+| **Database** | SQLite with text search | Implemented |
+| **Engine** | Unreal Engine 5 (C++ client) | Interface only |
+| **Inference** | Llama-3-8B (planned) | Not integrated |
+| **Personalities** | LoRA Adapters | Awaiting files |
+| **Voice STT** | Whisper | Stub only |
+| **Voice TTS** | Piper | Stub only |
 
-## 🚀 Getting Started
+## Getting Started
 
 > **Note**: This is an early-stage prototype. The framework is functional but AI model integration is in progress.
 
@@ -107,7 +107,7 @@ python3 orchestration/game_master.py
 python3 orchestration/lora_switcher.py
 ```
 
-## 🧠 Usage Example: The "Broken Window" Scenario
+## Usage Example: The "Broken Window" Scenario
 
 1. **Player Action:** In UE5, the player throws a physics object (Brick) at a window.
 2. **Event Log:** UE5 sends a JSON payload to `localhost:8000/event`: `{ "action": "break_glass", "location": "Apt 1A", "noise_level": 90 }`.
@@ -117,10 +117,10 @@ python3 orchestration/lora_switcher.py
     * *Agent B (Landlord):* Loaded with `LoRA_Vigilante`. Output: "Grabs bat, moves to Apt 1A."
 5. **Result:** UE5 receives instructions to spawn the Landlord NPC moving toward the player.
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see `CONTRIBUTING.md` for details on how to train new LoRA adapters or optimize the RAG pipeline.
 
-## 📜 License
+## License
 
 This project is licensed under the MIT License - see the `LICENSE` file for details.

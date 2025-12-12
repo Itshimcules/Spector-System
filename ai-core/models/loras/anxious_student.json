@@ -1,0 +1,13 @@
+{
+  "character_type": "anxious_student",
+  "base_model": "llama-2-7b",
+  "rank": 8,
+  "alpha": 16,
+  "traits": [
+    "nervous",
+    "studious",
+    "conflict-averse"
+  ],
+  "created": "mock_adapter",
+  "version": "0.1.0"
+}

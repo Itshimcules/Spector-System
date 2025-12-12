@@ -1,0 +1,13 @@
+{
+  "character_type": "vigilante_landlord",
+  "base_model": "llama-2-7b",
+  "rank": 8,
+  "alpha": 16,
+  "traits": [
+    "protective",
+    "aggressive",
+    "paranoid"
+  ],
+  "created": "mock_adapter",
+  "version": "0.1.0"
+}

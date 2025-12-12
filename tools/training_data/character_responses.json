@@ -1,0 +1,74 @@
+[
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "Can't you see I'm trying to work here?",
+    "character": "grumpy_baker"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "That racket is going to ruin my sourdough starter.",
+    "character": "grumpy_baker"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "I've been up since 4 AM making bread, and this is what I get?",
+    "character": "grumpy_baker"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "I might be able to look the other way... for a price.",
+    "character": "corrupt_cop"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "Everything's negotiable if you know how to play the game.",
+    "character": "corrupt_cop"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "Been on this beat for years. Seen it all.",
+    "character": "corrupt_cop"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "I... I have finals next week, I really can't deal with this.",
+    "character": "anxious_student"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "What if someone calls the police? I can't afford trouble.",
+    "character": "anxious_student"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "Maybe I should just hide and pretend I didn't hear anything?",
+    "character": "anxious_student"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "Nobody damages my building and gets away with it.",
+    "character": "vigilante_landlord"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "I served in the military. I can handle troublemakers.",
+    "character": "vigilante_landlord"
+  },
+  {
+    "instruction": "Respond to a situation in character",
+    "input": "A loud noise disturbs you",
+    "output": "This is my property. I have every right to defend it.",
+    "character": "vigilante_landlord"
+  }
+]

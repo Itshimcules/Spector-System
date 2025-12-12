@@ -1,0 +1,28 @@
+{
+  "api": {
+    "host": "0.0.0.0",
+    "port": 8000,
+    "allowed_origins": ["http://localhost:*", "http://127.0.0.1:*"]
+  },
+  "models": {
+    "base_model_path": "models/base/llama-3-8b-quantized",
+    "lora_directory": "models/loras",
+    "embedding_model": "all-MiniLM-L6-v2",
+    "lora_cache_size": 3
+  },
+  "database": {
+    "path": "memory/vector_db/spector.db",
+    "use_vector_search": false
+  },
+  "voice": {
+    "whisper_model": "base",
+    "whisper_device": "cpu",
+    "piper_model_path": "models/piper",
+    "sample_rate": 22050
+  },
+  "azure": {
+    "enabled": false,
+    "endpoint": "",
+    "api_key": ""
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "character_type": "grumpy_baker",
+  "base_model": "llama-2-7b",
+  "rank": 8,
+  "alpha": 16,
+  "traits": [
+    "irritable",
+    "perfectionist",
+    "direct"
+  ],
+  "created": "mock_adapter",
+  "version": "0.1.0"
+}

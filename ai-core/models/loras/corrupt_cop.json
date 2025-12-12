@@ -1,0 +1,13 @@
+{
+  "character_type": "corrupt_cop",
+  "base_model": "llama-2-7b",
+  "rank": 8,
+  "alpha": 16,
+  "traits": [
+    "cynical",
+    "opportunistic",
+    "street-smart"
+  ],
+  "created": "mock_adapter",
+  "version": "0.1.0"
+}

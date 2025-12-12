@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+*.egg-info/
+dist/
+build/
+
+# AI Models
+ai-core/models/base/
+ai-core/models/loras/*.lora
+*.safetensors
+*.bin
+*.gguf
+
+# Database
+ai-core/memory/vector_db/*.db
+ai-core/memory/vector_db/*.db-*
+
+# API Keys & Secrets
+ai-core/config/settings.json
+.env
+*.pem
+*.key
+
+# Unreal Engine
+unreal-client/Saved/
+unreal-client/Intermediate/
+unreal-client/Binaries/
+unreal-client/DerivedDataCache/
+unreal-client/*.sln
+unreal-client/*.suo
+unreal-client/*.xcodeproj
+unreal-client/*.xcworkspace
+
+# Audio files
+*.wav
+*.mp3
+*.ogg
+
+# OS
+.DS_Store
+Thumbs.db
+*.log

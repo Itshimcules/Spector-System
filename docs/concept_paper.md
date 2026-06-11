@@ -1,5 +1,7 @@
 # Project Spector Concept Paper
 
+> For the full technical treatment — architecture, latency engineering, and limitations — see the [Project Spector Whitepaper](WHITEPAPER.md).
+
 ## The "One City Block" Vision
 
 This document outlines the theoretical foundation for Project Spector, based on Warren Spector's vision of deep simulation over broad simulation.

@@ -7,6 +7,7 @@ Project Spector is an AI-driven NPC simulation framework that implements Warren 
 ## Quick Links
 
 ### Getting Started
+- [Whitepaper](https://github.com/Itshimcules/Spector-System/blob/main/docs/WHITEPAPER.md) — full architecture and design rationale
 - [Installation Guide](Installation-Guide)
 - [Quick Start Tutorial](Quick-Start)
 - [Architecture Overview](Architecture)

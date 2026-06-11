@@ -1,5 +1,9 @@
 # Project Spector: High-Density "One City Block" Simulation
 
+[![tests](https://github.com/Itshimcules/Spector-System/actions/workflows/tests.yml/badge.svg)](https://github.com/Itshimcules/Spector-System/actions/workflows/tests.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](ai-core/requirements.txt)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 > **"A simulation where the player cannot travel for miles, but can enter every room, open every drawer, speak to every resident, and disrupt every routine."**
 
 ## Abstract
@@ -19,11 +23,12 @@ This repository contains the core architecture and orchestration layer for Proje
 - [x] LoRA adapter management (awaiting model files)
 - [x] Memory storage with text search
 - [x] C++ client for Unreal Engine integration
-- [ ] Voice services (stub implementations)
-- [ ] AI model integration (in progress)
+- [x] Voice services (Whisper STT + Piper TTS with graceful mock fallback)
+- [x] Pytest suite covering orchestration, memory, and voice layers
+- [ ] AI model integration (in progress — LLM model files needed)
 - [ ] Unreal Engine environment (not included)
 
-**What works now**: Event orchestration, agent selection, prompt generation, database operations.  
+**What works now**: Event orchestration, agent selection, prompt generation, database operations, voice mock layer.  
 **What's needed**: LLM model files, LoRA adapters, Unreal Engine implementation.
 
 ## Architecture
@@ -56,9 +61,9 @@ The system is composed of three distinct "Pillars" that bridge the gap between t
 | **Database** | SQLite with text search | Implemented |
 | **Engine** | Unreal Engine 5 (C++ client) | Interface only |
 | **Inference** | Llama-3-8B (planned) | Not integrated |
-| **Personalities** | LoRA Adapters | Awaiting files |
-| **Voice STT** | Whisper | Stub only |
-| **Voice TTS** | Piper | Stub only |
+| **Personalities** | LoRA Adapters | Awaiting model files |
+| **Voice STT** | Whisper | Implemented (mock fallback) |
+| **Voice TTS** | Piper | Implemented (mock fallback) |
 
 ## Getting Started
 
@@ -97,14 +102,12 @@ python3 main_api.py
 
 Server will start on: `http://localhost:8000`
 
-#### 4. Test the System
+#### 4. Run the Test Suite
 
 ```bash
-# Test Game Master
-python3 orchestration/game_master.py
-
-# Test LoRA switcher
-python3 orchestration/lora_switcher.py
+cd ai-core
+pip install pyyaml pytest
+pytest tests/ -v
 ```
 
 ## Usage Example: The "Broken Window" Scenario

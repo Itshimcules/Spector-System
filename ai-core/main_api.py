@@ -15,6 +15,7 @@ import uvicorn
 from orchestration.game_master import GameMaster
 from orchestration.lora_switcher import LoRASwitcher
 from orchestration.rag_engine import RAGEngine
+from grounding.validator import WorldState
 from voice.stt_whisper import WhisperSTT
 from voice.tts_piper import PiperTTS
 
@@ -83,16 +84,31 @@ async def process_event(event: GameEvent):
     Returns affected agents and their reactions
     """
     try:
-        response = game_master.process_event(event.model_dump())
-        
-        # Generate actual LLM responses for each agent
+        event_data = event.model_dump()
+        response = game_master.process_event(event_data)
+
+        # Ground each reaction into a validated, executable decision.
         for reaction in response['agent_reactions']:
-            lora_response = lora_switcher.generate_response(
-                adapter_name=reaction['lora_adapter'],
-                prompt=reaction['prompt']
+            world = WorldState.from_sources(
+                game_master.agents_config, rag_engine, reaction['agent_id']
             )
-            reaction['generated_response'] = lora_response
-        
+            result = lora_switcher.generate_decision(
+                adapter_name=reaction['lora_adapter'],
+                prompt=reaction['prompt'],
+                world_state=world,
+                focus_location=event_data.get('location'),
+            )
+            reaction['decision'] = result.decision.model_dump()
+            if result.rejected:
+                reaction['rejected_actions'] = result.rejected
+
+            # Back-compatible text field, derived from the decision's speech.
+            says = [
+                a['text'] for a in reaction['decision']['actions']
+                if a['verb'] == 'say'
+            ]
+            reaction['generated_response'] = " ".join(says)
+
         return response
 
     except HTTPException:

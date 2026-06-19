@@ -22,6 +22,10 @@ llama-cpp-python>=0.2.20; platform_system != "Windows"
 # Speech-to-text. Large (depends on torch). Model weights download on first use.
 openai-whisper>=20231117
 
+# GPU VRAM measurement for tools/bench_inference.py (optional; the harness
+# falls back to nvidia-smi, then to no VRAM reading, when this is absent).
+pynvml>=11.5.0
+
 # Text-to-speech (Piper) is installed separately, not via pip:
 #   Ubuntu/Debian:  apt install piper
 #   Or download a release binary from https://github.com/rhasspy/piper

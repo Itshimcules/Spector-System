@@ -152,6 +152,18 @@ class RAGEngine:
             logger.error(f"Failed to store object: {e}")
             self.conn.rollback()
     
+    def all_objects(self) -> List[Dict[str, Any]]:
+        """Return every world object (id, name, location). Used to build world state."""
+        cursor = self.conn.cursor()
+        try:
+            rows = cursor.execute(
+                "SELECT id, name, current_location FROM world_objects"
+            ).fetchall()
+            return [dict(row) for row in rows]
+        except sqlite3.Error as e:
+            logger.error(f"Failed to list objects: {e}")
+            return []
+
     def find_relevant_objects(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         """Find objects relevant to query using text search"""
         cursor = self.conn.cursor()

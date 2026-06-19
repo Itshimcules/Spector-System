@@ -41,6 +41,20 @@
 - JSON request/response handling
 - Blueprint interface specification
 
+**Behavioral Grounding (Structured Actions)**
+- Closed game-verb vocabulary (`grounding/actions.py`) with Pydantic schemas
+- Constrained-decoding grammar (GBNF) for structurally-valid generation
+- World-state validator that drops/repairs illegal actions before they reach
+  the engine — the "cannot break game state" guarantee
+- Wired into `/event`: reactions return validated `decision` + `rejected_actions`
+- Fuzz-tested invariant: 500 adversarial generations, zero illegal actions pass
+
+**Inference Benchmark Harness**
+- `tools/bench_inference.py` measures adapter swap time, first-token latency,
+  tokens/s, and peak VRAM per LoRA adapter (llama.cpp backend)
+- Runs anywhere (self-describes with no model); real numbers need a GPU
+- Results template and methodology in `docs/BENCHMARKS.md`
+
 ### ⚠️ Partial/Stub Components
 
 **Voice Services**

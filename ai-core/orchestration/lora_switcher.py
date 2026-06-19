@@ -137,6 +137,18 @@ class LoRASwitcher:
                 except FileNotFoundError as e:
                     logger.warning(str(e))
 
+    def _ensure_llm(self):
+        """Lazily construct the shared LLM engine."""
+        if not hasattr(self, 'llm_engine'):
+            from models.llm_engine import LLMEngine
+            self.llm_engine = LLMEngine()
+        return self.llm_engine
+
+    def _character_prefix(self, adapter: dict) -> str:
+        """Prompt prefix carrying the adapter's character traits."""
+        traits = (adapter.get('metadata') or {}).get('traits', [])
+        return f"Character traits: {', '.join(traits)}. " if traits else ""
+
     def generate_response(self, adapter_name: str, prompt: str,
                          max_tokens: int = 100,
                          temperature: float = 0.7) -> str:
@@ -148,28 +160,29 @@ class LoRASwitcher:
         generation when no base model is loaded.
         """
         adapter = self.get_adapter(adapter_name)
-
-        # Load LLM engine if not already loaded
-        if not hasattr(self, 'llm_engine'):
-            from models.llm_engine import LLMEngine
-            self.llm_engine = LLMEngine()
-
-        # Enrich the prompt with character traits from the adapter metadata
-        character_context = ""
-        traits = (adapter.get('metadata') or {}).get('traits', [])
-        if traits:
-            character_context = f"Character traits: {', '.join(traits)}. "
-
-        enhanced_prompt = f"{character_context}{prompt}"
-
-        # Generate response
-        response = self.llm_engine.generate(
+        llm = self._ensure_llm()
+        enhanced_prompt = f"{self._character_prefix(adapter)}{prompt}"
+        return llm.generate(
             enhanced_prompt,
             max_tokens=max_tokens,
-            temperature=temperature
+            temperature=temperature,
         )
 
-        return response
+    def generate_decision(self, adapter_name: str, prompt: str,
+                          world_state, focus_location=None):
+        """
+        Generate a *validated* AgentDecision for the given adapter.
+
+        Same adapter/metadata path as ``generate_response``, but the output is a
+        structured, world-validated decision (see ``grounding``) rather than raw
+        text. Returns a ``grounding.ValidationResult``.
+        """
+        adapter = self.get_adapter(adapter_name)
+        llm = self._ensure_llm()
+        enhanced_prompt = f"{self._character_prefix(adapter)}{prompt}"
+
+        from grounding.runtime import decide
+        return decide(llm, enhanced_prompt, world_state, focus_location=focus_location)
 
     def get_cache_status(self) -> Dict[str, any]:
         """Get current cache statistics"""

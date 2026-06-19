@@ -66,6 +66,34 @@ class LLMEngine:
             logger.error(f"Generation failed: {e}")
             return self._mock_generate(prompt, max_tokens)
     
+    def generate_decision(self, prompt: str, grammar=None,
+                          max_tokens: int = 256, temperature: float = 0.4) -> str:
+        """
+        Generate a structured AgentDecision as a JSON string.
+
+        With a real model loaded, ``grammar`` (a llama.cpp GBNF grammar) constrains
+        decoding so the output is always schema-valid JSON. In mock mode the
+        grounding runtime uses the heuristic path instead, but we still return a
+        minimal valid decision here so direct callers get well-formed output.
+        """
+        if self.use_mock:
+            import json
+            return json.dumps({
+                "reasoning": "mock",
+                "actions": [{"verb": "say", "text": self._mock_generate(prompt, max_tokens)}],
+            })
+
+        try:
+            kwargs = dict(max_tokens=max_tokens, temperature=temperature, echo=False)
+            if grammar is not None:
+                kwargs["grammar"] = grammar
+            response = self.model(prompt, **kwargs)
+            return response['choices'][0]['text'].strip()
+        except Exception as e:
+            logger.error(f"Decision generation failed: {e}")
+            import json
+            return json.dumps({"reasoning": "error", "actions": [{"verb": "do_nothing"}]})
+
     def _mock_generate(self, prompt: str, max_tokens: int) -> str:
         """Generate mock response for testing"""
         # Extract character traits from prompt

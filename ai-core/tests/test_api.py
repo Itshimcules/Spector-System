@@ -61,6 +61,18 @@ def test_event_returns_generated_reactions(client):
         assert reaction["generated_response"]
 
 
+def test_event_reactions_carry_validated_decisions(client):
+    from grounding.actions import VERBS
+
+    resp = client.post("/event", json=BROKEN_WINDOW)
+    body = resp.json()
+    for reaction in body["agent_reactions"]:
+        decision = reaction["decision"]
+        assert decision["actions"], "every reaction must yield at least one action"
+        for action in decision["actions"]:
+            assert action["verb"] in VERBS
+
+
 def test_dialogue_unknown_npc_returns_404(client):
     resp = client.post(
         "/dialogue", json={"npc_id": "ghost_99", "player_message": "Hi?"}

@@ -1,27 +1,20 @@
+# Project Spector - core runtime
+#
+# Pure-Python wheels only: installs with no compiler and no model downloads.
+# These are all you need to run the full event pipeline, memory, and voice
+# layers in mock mode, and to run the test suite.
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0
-numpy==1.24.3
-torch==2.1.0
-transformers==4.35.0
 pyyaml==6.0.1
 python-multipart==0.0.6
-
-# LLM Inference (optional, for local models)
-llama-cpp-python==0.2.20; platform_system != "Windows"
-
-# Voice Services (optional)
-openai-whisper==20231117
-# For Piper - installed separately via system package manager
-
-# Utilities
 python-dotenv==1.0.0
 requests==2.31.0
 tqdm==4.66.1
+httpx==0.25.2          # used by the FastAPI test client in the test suite
 
-# NOTE: Removed deprecated dependencies:
-# - sentence-transformers (not needed with text search)
-# - sqlite-vec (replaced with standard SQLite)
-# - peft (for future LoRA training)
-# - accelerate (for future GPU acceleration)
-# - bitsandbytes (Linux only, for quantization)
+# Optional: real AI models (local LLM inference, Whisper STT, GPU acceleration)
+# pull in large / compiled dependencies and are NOT required for mock mode.
+# Install them only when you want real inference instead of mock fallbacks:
+#
+#     pip install -r requirements-ml.txt

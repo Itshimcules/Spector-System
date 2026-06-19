@@ -20,6 +20,8 @@
 - Pre-loading system for predictive fetching
 - Cache statistics tracking
 - File-based adapter loading (ready for real models)
+- Graceful mock fallback: serves metadata-only adapters when trained `.lora`
+  weights are absent, so the full pipeline runs with no model downloads
 
 **RAG Engine (Memory System)**
 - SQLite database for persistent storage
@@ -76,8 +78,8 @@
 - [x] Event orchestration system
 - [x] Memory storage
 - [x] Basic configuration management
-- [ ] Dependency optimization
-- [ ] Basic test coverage
+- [x] Dependency optimization (core vs. optional ML requirements split)
+- [x] Basic test coverage (unit + integration, CI-enforced)
 
 ### Phase 2: AI Integration (Next)
 - [ ] Download & integrate Llama-3-8B

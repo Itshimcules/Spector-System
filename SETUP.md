@@ -58,12 +58,20 @@ cd ai-core
 pip install -r requirements.txt
 ```
 
-### 2. Download Base Model
+The core requirements are pure-Python (no compiler, no model downloads) and are
+enough to run everything in **mock mode**.
 
-You'll need to download Llama-3-8B (Quantized) and place it in:
+### 2. (Optional) Add Real Models
+
+Mock mode needs none of this. For real inference, install the heavier ML
+dependencies and download a quantized Llama-3-8B into
+`ai-core/models/base/llama-3-8b-quantized/`:
+
+```bash
+pip install -r requirements-ml.txt
 ```
-ai-core/models/base/llama-3-8b-quantized/
-```
+
+See [AI_INTEGRATION.md](AI_INTEGRATION.md) for model downloads and voice setup.
 
 ### 3. Initialize Database
 
@@ -80,6 +88,9 @@ python main_api.py
 ```
 
 Server will run on: `http://localhost:8000`
+
+> `config/settings.json` is git-ignored and optional — the server falls back to
+> `config/settings.example.json` automatically. Copy it only to customize.
 
 ### 5. Open Unreal Project
 

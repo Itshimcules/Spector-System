@@ -7,6 +7,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
+import base64
 import json
 import logging
 import uvicorn
@@ -82,7 +83,7 @@ async def process_event(event: GameEvent):
     Returns affected agents and their reactions
     """
     try:
-        response = game_master.process_event(event.dict())
+        response = game_master.process_event(event.model_dump())
         
         # Generate actual LLM responses for each agent
         for reaction in response['agent_reactions']:
@@ -93,7 +94,9 @@ async def process_event(event: GameEvent):
             reaction['generated_response'] = lora_response
         
         return response
-    
+
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -110,30 +113,38 @@ async def npc_dialogue(request: NPCDialogueRequest):
             current_event=request.player_message
         )
         
+        if not context['agent']:
+            raise HTTPException(
+                status_code=404, detail=f"Unknown NPC: {request.npc_id}"
+            )
+
         # Build prompt
         agent = context['agent']
         prompt = f"""You are {agent['name']}.
 Player says: "{request.player_message}"
 
 Respond naturally in character (1-2 sentences)."""
-        
-        # Generate response with appropriate LoRA
-        lora_adapter = f"{agent['archetype']}.lora"
+
+        # Generate response with the agent's own LoRA adapter (fall back to a
+        # name derived from the archetype if the record predates that field).
+        lora_adapter = agent.get('lora_adapter') or f"{agent['archetype']}.lora"
         response_text = lora_switcher.generate_response(lora_adapter, prompt)
-        
+
         # Convert to speech
         audio = tts_service.synthesize(
             text=response_text,
             voice_id=agent.get('voice_id', 'default')
         )
-        
+
         return {
             "npc_id": request.npc_id,
             "text_response": response_text,
-            "audio_base64": audio.hex(),  # In production, use base64
-            "emotional_state": agent['emotional_state']
+            "audio_base64": base64.b64encode(audio).decode('ascii'),
+            "emotional_state": agent.get('emotional_state', 'neutral')
         }
-    
+
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

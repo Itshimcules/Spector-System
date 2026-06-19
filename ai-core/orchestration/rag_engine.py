@@ -6,6 +6,7 @@ Full-text search over episodic memories using SQLite FTS5
 import sqlite3
 import json
 import logging
+import os
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
@@ -20,6 +21,11 @@ class RAGEngine:
     
     def __init__(self, db_path: str = "memory/vector_db/spector.db"):
         self.db_path = db_path
+        # Ensure the database directory exists so sqlite can open/create the
+        # file even before the seed script has run.
+        db_dir = os.path.dirname(db_path)
+        if db_dir:
+            os.makedirs(db_dir, exist_ok=True)
         try:
             self.conn = sqlite3.connect(db_path, check_same_thread=False)
             self.conn.row_factory = sqlite3.Row

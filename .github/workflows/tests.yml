@@ -17,7 +17,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install test dependencies
-        run: pip install pyyaml pytest
+      - name: Install dependencies
+        # Core requirements install with no compiler and no model downloads,
+        # and are enough to run the full suite (including the API tests) in
+        # mock mode. This also validates that requirements.txt stays clean.
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
       - name: Run tests
         run: pytest tests/ -v

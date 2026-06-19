@@ -116,6 +116,10 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+`requirements.txt` is pure-Python and needs no compiler or model files — it is
+all you need for mock mode. Real models (local LLM, Whisper) are an optional,
+heavier install: `pip install -r requirements-ml.txt`.
+
 ### 2. Initialize the Database
 
 ```bash
@@ -131,6 +135,10 @@ python3 main_api.py
 # Server: http://localhost:8000  (interactive docs at /docs)
 ```
 
+> No `config/settings.json`? The server automatically falls back to the
+> committed `config/settings.example.json`, so it runs out of the box. Copy the
+> example to `settings.json` only when you want to customize (it's git-ignored).
+
 ### 4. Throw a brick
 
 ```bash
@@ -139,15 +147,19 @@ curl -X POST http://localhost:8000/event \
   -d '{"event_type":"property_damage","action":"break_glass","location":"apartment_1a","noise_level":90,"event_description":"A window has been shattered by a thrown brick."}'
 ```
 
+All four agents react in character — `grumpy_baker`, `corrupt_cop`,
+`anxious_student`, and `vigilante_landlord` adapters are served in metadata-only
+mock mode, so the full pipeline returns `200` with no model files present.
+
 ### 5. Run the Test Suite
 
 ```bash
 cd ai-core
-pip install pyyaml pytest
+pip install -r requirements.txt pytest   # core deps + pytest
 pytest tests/ -v
 ```
 
-When you're ready for real inference, see [AI_INTEGRATION.md](AI_INTEGRATION.md) for model setup (one `pip install` and a 4 GB download).
+When you're ready for real inference, see [AI_INTEGRATION.md](AI_INTEGRATION.md) for model setup (`pip install -r requirements-ml.txt` plus a model download).
 
 ## Documentation
 

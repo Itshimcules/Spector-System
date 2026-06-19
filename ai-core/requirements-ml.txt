@@ -1,0 +1,27 @@
+# Project Spector - optional ML dependencies for REAL inference
+#
+# NOT required for mock mode. Every component degrades gracefully without
+# these (see AI_INTEGRATION.md). Some are large (GPU libraries are several GB)
+# and some compile from source, so install them only when you want real
+# models instead of the deterministic mock fallbacks:
+#
+#     pip install -r requirements.txt        # core, always
+#     pip install -r requirements-ml.txt     # then add real models
+#
+# CPU-only PyTorch? See https://pytorch.org for the right index URL for your
+# platform; the default wheel below pulls the CUDA build and its NVIDIA libs.
+
+numpy>=1.24,<2
+torch>=2.1
+transformers>=4.35
+
+# Local LLM inference. Often ships a prebuilt wheel; on platforms without one
+# it compiles from source and needs a C/C++ toolchain + CMake.
+llama-cpp-python>=0.2.20; platform_system != "Windows"
+
+# Speech-to-text. Large (depends on torch). Model weights download on first use.
+openai-whisper>=20231117
+
+# Text-to-speech (Piper) is installed separately, not via pip:
+#   Ubuntu/Debian:  apt install piper
+#   Or download a release binary from https://github.com/rhasspy/piper

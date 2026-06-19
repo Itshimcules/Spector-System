@@ -1,6 +1,9 @@
 import json
+import os
 import pytest
 from orchestration.game_master import GameMaster
+
+AI_CORE = os.path.dirname(os.path.dirname(__file__))
 
 
 @pytest.fixture
@@ -134,3 +137,31 @@ def test_get_agent_schedule_missing_schedule(config_files):
     gm = GameMaster(config_path=settings_path, agents_path=agents_path)
     result = gm.get_agent_schedule("baker_01", "10:00")
     assert result is None or isinstance(result, dict)
+
+
+def test_resolve_config_path_returns_existing(tmp_path):
+    settings = tmp_path / "settings.json"
+    settings.write_text("{}")
+    assert GameMaster._resolve_config_path(str(settings)) == str(settings)
+
+
+def test_resolve_config_path_falls_back_to_example(tmp_path):
+    example = tmp_path / "settings.example.json"
+    example.write_text("{}")
+    resolved = GameMaster._resolve_config_path(str(tmp_path / "settings.json"))
+    assert resolved == str(example)
+
+
+def test_resolve_config_path_raises_when_nothing_present(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        GameMaster._resolve_config_path(str(tmp_path / "settings.json"))
+
+
+def test_default_init_works_from_ai_core(monkeypatch):
+    """A fresh clone (no settings.json) must still construct via the example."""
+    monkeypatch.chdir(AI_CORE)
+    gm = GameMaster()
+    assert gm.agents_config["agents"]
+    # Every agent's adapter name must match an asset on disk (archetype-named).
+    for agent in gm.agents_config["agents"]:
+        assert agent["lora_adapter"].endswith(".lora")

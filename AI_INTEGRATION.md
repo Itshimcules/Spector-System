@@ -41,8 +41,8 @@ python3 voice/tts_piper.py              # ✓ Generates WAV files
 For actual text generation:
 
 ```bash
-# Install llama-cpp-python
-pip install llama-cpp-python
+# Install the optional ML dependencies (includes llama-cpp-python)
+pip install -r requirements-ml.txt
 
 # Download a quantized model
 cd tools
@@ -83,9 +83,14 @@ Four LoRA adapters created with distinct personalities:
 
 **Location**: `ai-core/models/loras/`
 
-Each adapter includes:
-- `.lora` file (personality definition)
-- `.json` metadata (traits, character info)
+Each adapter is described by:
+- `.json` metadata (traits, character info) — committed to the repo
+- `.lora` file (trained weights) — large and git-ignored, so absent in a fresh
+  clone. When the weights are missing, the switcher loads the metadata only and
+  serves mock responses; it picks up the real weights automatically once trained.
+
+The `lora_adapter` field for each agent in `config/agents.yaml` must match the
+file base name here (e.g. `lora_adapter: "grumpy_baker.lora"`).
 
 ---
 
@@ -232,8 +237,12 @@ python3 train_lora.py --create-dataset
 ## Troubleshooting
 
 ### "LoRA adapter not found"
-- Run: `cd tools && python3 train_lora.py --create-mocks`
-- Verify files exist in `ai-core/models/loras/`
+- This only happens when **neither** the `.lora` weights **nor** the `.json`
+  metadata sidecar exist for an adapter. With metadata present, the switcher
+  falls back to a mock automatically — no error.
+- Check that the agent's `lora_adapter` in `config/agents.yaml` matches a file
+  base name in `ai-core/models/loras/` (e.g. `grumpy_baker`).
+- To regenerate the metadata mocks: `cd tools && python3 train_lora.py --create-mocks`
 
 ### "Whisper not installed"
 - This is a warning, not an error

@@ -5,9 +5,14 @@ Handles event orchestration and agent coordination
 
 import json
 import math
+import logging
+import os
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 import yaml
+
+logger = logging.getLogger(__name__)
+
 
 class GameMaster:
     """
@@ -17,18 +22,47 @@ class GameMaster:
     2. What context they need from memory
     3. Which LoRA adapters to load
     """
-    
-    def __init__(self, config_path: str = "config/settings.json", 
+
+    def __init__(self, config_path: str = "config/settings.json",
                  agents_path: str = "config/agents.yaml"):
+        config_path = self._resolve_config_path(config_path)
         with open(config_path, 'r') as f:
             self.config = json.load(f)
-        
+
         with open(agents_path, 'r') as f:
             self.agents_config = yaml.safe_load(f)
-        
+
         self.active_agents = {}
         self.event_history = []
-        
+
+    @staticmethod
+    def _resolve_config_path(config_path: str) -> str:
+        """
+        Resolve the settings file, falling back to the committed example.
+
+        ``settings.json`` is git-ignored (it may hold secrets), so a fresh
+        clone won't have one. Rather than crash on startup, fall back to the
+        ``settings.example.json`` shipped alongside it so the framework runs
+        out of the box; a real ``settings.json`` still takes precedence.
+        """
+        if os.path.exists(config_path):
+            return config_path
+
+        example_path = os.path.join(
+            os.path.dirname(config_path) or ".", "settings.example.json"
+        )
+        if os.path.exists(example_path):
+            logger.warning(
+                f"'{config_path}' not found; falling back to '{example_path}'. "
+                f"Copy it to '{config_path}' to customize."
+            )
+            return example_path
+
+        raise FileNotFoundError(
+            f"No settings file found at '{config_path}' and no "
+            f"'settings.example.json' to fall back to."
+        )
+
     def calculate_semantic_radius(self, event: Dict[str, Any]) -> float:
         """
         Calculate how far an event's influence reaches
